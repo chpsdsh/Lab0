@@ -1,3 +1,6 @@
-//
-// Created by И-ПК on 11.10.2023.
-//
+#include <stdio.h>
+#include <malloc.h>
+
+int main(){
+    return 0;
+}
