@@ -4,6 +4,13 @@
 #include <ctype.h>
 #include <math.h>
 
+
+void toUp(char *str){
+    for(int i = 0; str[i]!='\0';i++)
+        *(str+i) = toupper(*(str+i));
+}
+
+
 void proverkab1 (char *chislo, int b1){
     int cnt = 0;
         for(int i = 0; i < strlen(chislo); i++)
@@ -14,14 +21,28 @@ void proverkab1 (char *chislo, int b1){
         printf("bad input");
 }
 
-int splitsum(char*chislo){
-    int tochka;
-    float sum;
+
+float To10(char*chislo, int b1){
+    int tochka = strlen(chislo);
+    float sum = 0;
     for(int i = 0; i<strlen(chislo); i++)
         if (chislo[i] == '.')
             tochka = i;
-
+    for(int i = tochka - 1, pok = 0; i >= 0; i--,pok++){
+        if ((int)chislo[i]>=(int)'0' && (int)chislo[i]<=(int)'9')
+            sum += ((int)chislo[i] - (int)'0') * pow(b1,pok);
+        else
+            sum += ((int)chislo[i] - (int)'0' - 7) * pow(b1,pok);
+    }
+    for(int i = tochka + 1, pok = -1; i < strlen(chislo); i++,pok--) {
+        if ((int) chislo[i] >= (int) '0' && (int) chislo[i] <= (int) '9')
+            sum += ((int) chislo[i] - (int) '0') * pow(b1, pok);
+        else
+            sum += ((int) chislo[i] - (int) '0' - 7) * pow(b1, pok);
+    }
+    return sum;
 }
+
 int main(){
     int b1, b2;
     char chislo[13];
@@ -31,8 +52,9 @@ int main(){
         printf("bad input");
         return 0;
     }
+    toUp(chislo);
     proverkab1(chislo,b1);
-
+    printf("%f", To10(chislo,b1));
 
     return 0;
 
