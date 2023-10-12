@@ -2,6 +2,7 @@
 #include <malloc.h>
 #include <string.h>
 #include <ctype.h>
+#include <math.h>
 
 void proverkab1 (char *chislo, int b1){
     int cnt = 0;
@@ -13,6 +14,14 @@ void proverkab1 (char *chislo, int b1){
         printf("bad input");
 }
 
+int splitsum(char*chislo){
+    int tochka;
+    float sum;
+    for(int i = 0; i<strlen(chislo); i++)
+        if (chislo[i] == '.')
+            tochka = i;
+
+}
 int main(){
     int b1, b2;
     char chislo[13];
