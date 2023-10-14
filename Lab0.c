@@ -23,8 +23,8 @@ void razvorot(char *result){
 int proverkab1 (char *chislo, int b1){
     int cnt = 0;
     for(int i = 0; i < strlen(chislo); i++)
-        if(((int)chislo[i] > (int)'0' && (int)chislo[i] < (int)(b1  + '0')) ||
-        chislo[i] == '.' || (((int)chislo[i] - (int)'0' - b1 - 7 < 0))&&((int)chislo[i] >= 'A'))
+        if(((int)chislo[i] >= (int)'0' && (int)chislo[i] < (int)(b1  + '0')) ||
+                (chislo[i] == '.' && chislo[i+1] != '\0' && chislo[0] != '.' && chislo[i+1] != '.') || (((int)chislo[i] - (int)'0' - b1 - 7 < 0))&&((int)chislo[i] >= 'A'))
             cnt++;
 
     if (cnt != strlen(chislo))
@@ -65,12 +65,24 @@ void From10(double chislo, int b2) {
 
     while(intPart > 0){
         if (intPart >= b2){
-            result[resultSize] = ('0' + (intPart % b2));
-            result[resultSize+1] = '\0';
+            if(intPart % b2>=10){
+                result[resultSize] = ('0' + (intPart % b2)+ 7);
+                result[resultSize+1] = '\0';
+            }
+            else{
+                result[resultSize] = ('0' + (intPart % b2));
+                result[resultSize+1] = '\0';
+            }
         }
         else{
-            result[resultSize] = ('0' + (intPart));
-            result[resultSize+1] = '\0';
+            if(intPart % b2>=10){
+                result[resultSize] = ('0' + intPart + 7);
+                result[resultSize+1] = '\0';
+            }
+            else{
+                result[resultSize] = ('0' + intPart);
+                result[resultSize+1] = '\0';
+            }
         }
         intPart /= b2;
         resultSize++;
@@ -114,7 +126,7 @@ void From10(double chislo, int b2) {
 
 int main(){
     int b1, b2;
-    char chislo[13];
+    char chislo[14];
     scanf("%d %d",&b1, &b2);
     if(b1 < 2 || b1 > 16 || b2 < 2 || b2 > 16){
         printf("bad input");
