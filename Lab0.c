@@ -10,6 +10,7 @@ void toUp(char *str){
         *(str+i) = toupper(*(str+i));
 }
 
+
 void razvorot(char *result){
     char tmp;
     for(int i = 0; i < strlen(result)/2; i++){
@@ -24,7 +25,8 @@ int proverkab1 (char *chislo, int b1){
     int cnt = 0;
     for(int i = 0; i < strlen(chislo); i++)
         if(((int)chislo[i] >= (int)'0' && (int)chislo[i] < (int)(b1  + '0')) ||
-                (chislo[i] == '.' && chislo[i+1] != '\0' && chislo[0] != '.' && chislo[i+1] != '.') || (((int)chislo[i] - (int)'0' - b1 - 7 < 0))&&((int)chislo[i] >= 'A'))
+                (chislo[i] == '.' && chislo[i+1] != '\0' && chislo[0] != '.' && chislo[i+1] != '.') ||
+                (((int)chislo[i] - (int)'0' - b1 - 7 < 0)) && ((int)chislo[i] >= 'A'))
             cnt++;
 
     if (cnt != strlen(chislo))
@@ -62,26 +64,29 @@ void From10(double chislo, int b2) {
     result[0]='\0';
     long long int intPart =(long long int)chislo;
     double floatPart = chislo - intPart;
-
+    if(intPart==0){
+        result[resultSize] = ('0');
+        result[resultSize+1] = '\0';
+    }
     while(intPart > 0){
         if (intPart >= b2){
-            if(intPart % b2>=10){
-                result[resultSize] = ('0' + (intPart % b2)+ 7);
-                result[resultSize+1] = '\0';
+            if(intPart % b2 >= 10){
+                result[resultSize] = ('0' + (intPart % b2) + 7);
+                result[resultSize + 1] = '\0';
             }
             else{
                 result[resultSize] = ('0' + (intPart % b2));
-                result[resultSize+1] = '\0';
+                result[resultSize + 1] = '\0';
             }
         }
         else{
-            if(intPart % b2>=10){
+            if(intPart % b2 >= 10){
                 result[resultSize] = ('0' + intPart + 7);
-                result[resultSize+1] = '\0';
+                result[resultSize + 1] = '\0';
             }
             else{
                 result[resultSize] = ('0' + intPart);
-                result[resultSize+1] = '\0';
+                result[resultSize + 1] = '\0';
             }
         }
         intPart /= b2;
@@ -94,17 +99,19 @@ void From10(double chislo, int b2) {
     char *resultDrob = (char*) malloc(sizeof(char));;
     int resultDrobSize = 0;
 
-    if (floatPart>0){
+    if (floatPart > 0){
         resultDrob[resultDrobSize]= '.';
         resultDrob[resultDrobSize + 1] = '\0';
         resultDrobSize++;
         resultDrob =(char*)realloc(resultDrob,resultDrobSize * sizeof(char));
 
         while(floatPart != 0){
-            resultDrob[resultDrobSize] = '0' + ((int)(floatPart * b2));
+            if(floatPart * b2 >= 10)
+                resultDrob[resultDrobSize] = '0' + ((int)(floatPart * b2)) + 7;
+            else
+                resultDrob[resultDrobSize] = '0' + ((int)(floatPart * b2));
+            floatPart = (floatPart * b2) - (int)(floatPart * b2);
             resultDrob[resultDrobSize + 1] = '\0';
-            floatPart = (floatPart * b2)-(int)(floatPart * b2);
-            //printf("%s %f\n",result,floatPart);
             resultDrobSize++;
             resultDrob =(char*)realloc(resultDrob,resultDrobSize * sizeof(char));
         }
