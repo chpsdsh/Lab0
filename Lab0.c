@@ -65,7 +65,7 @@ void From10(double chislo, int b2) {
     long long int intPart =(long long int)chislo;
     double floatPart = chislo - intPart;
     if(intPart==0){
-        result[resultSize] = ('0');
+        result[resultSize] = '0';
         result[resultSize+1] = '\0';
     }
     while(intPart > 0){
