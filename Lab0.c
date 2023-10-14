@@ -17,16 +17,20 @@ void razvorot(char *result){
         result[i] = result[strlen(result) - i - 1];
         result[strlen(result) - i - 1] = tmp;
     }
-
 }
-void proverkab1 (char *chislo, int b1){
+
+
+int proverkab1 (char *chislo, int b1){
     int cnt = 0;
-        for(int i = 0; i < strlen(chislo); i++)
-            if(((int)chislo[i] > (int)'0' && (int)chislo[i] <= (int)((b1 - 1) + '0')) || chislo[i] == '.' || (((int)chislo[i] - (int)'0' - b1 - 7 < 0)))
-                cnt++;
+    for(int i = 0; i < strlen(chislo); i++)
+        if(((int)chislo[i] > (int)'0' && (int)chislo[i] < (int)(b1  + '0')) ||
+        chislo[i] == '.' || (((int)chislo[i] - (int)'0' - b1 - 7 < 0))&&((int)chislo[i] >= 'A'))
+            cnt++;
 
     if (cnt != strlen(chislo))
-        printf("bad input");
+        return 1;
+    else
+        return 0;
 }
 
 
@@ -58,51 +62,69 @@ void From10(double chislo, int b2) {
     result[0]='\0';
     long long int intPart =(long long int)chislo;
     double floatPart = chislo - intPart;
-    printf("%lld %f\n",intPart,floatPart);
 
     while(intPart > 0){
-        result[resultSize] = ('0' + (intPart % b2));
-        result[resultSize+1] = '\0';
+        if (intPart >= b2){
+            result[resultSize] = ('0' + (intPart % b2));
+            result[resultSize+1] = '\0';
+        }
+        else{
+            result[resultSize] = ('0' + (intPart));
+            result[resultSize+1] = '\0';
+        }
         intPart /= b2;
         resultSize++;
         result =(char*)realloc(result,resultSize * sizeof(char));
     }
-    printf("%s %d\n",result,15%16);
+
     razvorot(result);
 
-    if (floatPart>0){
-        result[resultSize]= '.';
-        resultSize++;
-        result =(char*)realloc(result,resultSize * sizeof(char));
+    char *resultDrob = (char*) malloc(sizeof(char));;
+    int resultDrobSize = 0;
 
+    if (floatPart>0){
+        resultDrob[resultDrobSize]= '.';
+        resultDrob[resultDrobSize + 1] = '\0';
+        resultDrobSize++;
+        resultDrob =(char*)realloc(resultDrob,resultDrobSize * sizeof(char));
 
         while(floatPart != 0){
-            result[resultSize] = '0' + ((int)(floatPart * b2));
-            result[resultSize+1] = '\0';
+            resultDrob[resultDrobSize] = '0' + ((int)(floatPart * b2));
+            resultDrob[resultDrobSize + 1] = '\0';
             floatPart = (floatPart * b2)-(int)(floatPart * b2);
             //printf("%s %f\n",result,floatPart);
-            resultSize++;
-            result =(char*)realloc(result,resultSize * sizeof(char));
+            resultDrobSize++;
+            resultDrob =(char*)realloc(resultDrob,resultDrobSize * sizeof(char));
+        }
+
+        if(resultDrobSize < 13){
+            for(int i = resultDrobSize; i < 13; i++){
+                resultDrob[resultDrobSize] = '0';
+                resultDrob[resultDrobSize + 1] = '\0';
+                resultDrobSize++;
+                resultDrob =(char*)realloc(resultDrob,resultDrobSize * sizeof(char));
+            }
         }
     }
-    printf("%s",result);
+    printf("%s%s",result,resultDrob);
 }
+
 
 int main(){
     int b1, b2;
     char chislo[13];
     scanf("%d %d",&b1, &b2);
-   if(b1 < 2 || b1 > 16 || b2 < 2 || b2 > 16){
+    if(b1 < 2 || b1 > 16 || b2 < 2 || b2 > 16){
         printf("bad input");
         return 0;
     }
     scanf("%s",&chislo);
     toUp(chislo);
-    proverkab1(chislo,b1);
+    if(proverkab1(chislo,b1)){
+        printf("bad input");
+        return 0;
+    }
     double decimal = To10(chislo,b1);
-    printf("%f\n",decimal);
     From10(decimal, b2);
-
     return 0;
-
 }
