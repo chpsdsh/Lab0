@@ -105,8 +105,10 @@ void From10(double chislo, int b2) {
                 resultDrob =(char*)realloc(resultDrob,resultDrobSize * sizeof(char));
             }
         }
+        printf("%s%s",result,resultDrob);
     }
-    printf("%s%s",result,resultDrob);
+    else
+        printf("%s",result);
 }
 
 
