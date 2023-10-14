@@ -61,15 +61,20 @@ void From10(double chislo, int b2) {
     printf("%lld %f\n",intPart,floatPart);
 
     while(intPart > 0){
-        result[resultSize] = ('0' + (intPart % b2));
-        result[resultSize+1] = '\0';
+        if (intPart >= b2){
+            result[resultSize] = ('0' + (intPart % b2));
+            result[resultSize+1] = '\0';
+        }
+        else{
+            result[resultSize] = ('0' + (intPart));
+            result[resultSize+1] = '\0';
+        }
+
         intPart /= b2;
         resultSize++;
         result =(char*)realloc(result,resultSize * sizeof(char));
     }
-    printf("%s %d\n",result,15%16);
     razvorot(result);
-
     if (floatPart>0){
         result[resultSize]= '.';
         resultSize++;
